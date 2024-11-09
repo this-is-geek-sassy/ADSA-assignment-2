@@ -76,9 +76,14 @@ int main() {
     // printf("Created Doubly Linked List is: ");
     // printList(head);
 
-    char sample_string[100];
+    int n;
+    printf("Enter the length of the string: ");
+    scanf("%d", &n);
 
-    printf("Enter a string length less than length 100: ");
+    char sample_string[n];
+
+    getchar();
+    printf("\nEnter a string length less than length n: ");
     fgets(sample_string, 100, stdin);
 
     printf("You entered: %s", sample_string);
@@ -89,6 +94,26 @@ int main() {
     }
 
     printList(head);
+
+    // defining a 2D matrix for memoization
+    int ** table = (int ** )malloc(n * sizeof(int *));
+
+    for (size_t i = 0; i < n; i++)
+    {
+        table[i] = calloc(n, sizeof(int));
+    }
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            printf("%d ", table[i][j]);
+        }
+        printf("\n");
+        
+    }
+    
+    
     
 
     return 0;
