@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Node structure for a doubly linked list
 struct Node {
-    int data;
+    char data;
     struct Node *prev, *next;
 };
+typedef struct Node node;
 
 // Function to create a new node
 struct Node* newNode(int data) {
@@ -25,7 +27,7 @@ void push(struct Node** head_ref, int new_data) {
     new_node->next = (*head_ref);
 
     // 3. Change prev of head node as new node
-    if ((*head_ref) != NULL)
+    if ((*head_ref) != NULL)/* code */
         (*head_ref)->prev = new_node;
 
     // 4. Move the head to point to the new node
@@ -55,7 +57,7 @@ void append(struct Node** head_ref, struct Node** tail_ref, int new_data) {
 // Function to print the linked list
 void printList(struct Node* node) {
     while (node != NULL) {
-        printf("%d ", node->data);
+        printf("%c ", node->data);
         node = node->next;
     }
     printf("\n");
@@ -65,14 +67,29 @@ int main() {
     struct Node* head = NULL, *tail = NULL;
 
     // Create the list 10->20->30->40->50
-    append(&head, &tail, 10);
-    push(&head, 20);
-    push(&head, 30);
-    append(&head, &tail, 40);
-    append(&head, &tail, 50);
+    // append(&head, &tail, 100);
+    // push(&head, 80);
+    // push(&head, 70);
+    // append(&head, &tail, 84);
+    // append(&head, &tail, 95);
 
-    printf("Created Doubly Linked List is: ");
+    // printf("Created Doubly Linked List is: ");
+    // printList(head);
+
+    char sample_string[100];
+
+    printf("Enter a string length less than length 100: ");
+    fgets(sample_string, 100, stdin);
+
+    printf("You entered: %s", sample_string);
+    
+    for (size_t i = 0; i < strlen(sample_string); i++)
+    {
+        append(&head, &tail, sample_string[i]);
+    }
+
     printList(head);
+    
 
     return 0;
 }
