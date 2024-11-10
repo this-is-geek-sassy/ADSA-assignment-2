@@ -63,6 +63,37 @@ void printList(struct Node* node) {
     printf("\n");
 }
 
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int find_palindromic_subsequence(char * sample_string, int i, int j, int ** table) {
+
+    if (i > j) {
+        printf("SOMETHING TERRIBLY WRONG!!\n");
+        exit(1);
+    }
+    if (i==j) {
+        return table[i][i];
+    }
+    if (sample_string[i] == sample_string[j]) {
+        if (table[i][j] != 0)
+            return table[i][j];
+        table[i][j] = find_palindromic_subsequence(sample_string, i+1, j-1, table) + 2;
+        return table[i][j];
+    }
+    else {
+        if (table[i+1][j] == 0)
+            table[i+1][j] = find_palindromic_subsequence(sample_string, i+1, j, table);
+        
+        if (table[i][j-1] == 0)
+            table[i][j-1] = find_palindromic_subsequence(sample_string, i, j-1, table);
+        
+        table[i][j] = max(table[i+1][j], table[i][j-1]);
+        return table[i][j];
+    }
+}
+
 int main() {
     struct Node* head = NULL, *tail = NULL;
 
@@ -105,16 +136,14 @@ int main() {
 
     for (size_t i = 0; i < n; i++)
     {
-        for (size_t j = 0; j < n; j++)
-        {
-            printf("%d ", table[i][j]);
-        }
-        printf("\n");
-        
+        // for (size_t j = 0; j < n; j++)
+        // {
+        //     printf("%d ", table[i][j]);
+        // }
+        // printf("\n");
+        table[i][i] = 1;        
     }
-    
-    
-    
+    printf("%d \n", find_palindromic_subsequence(sample_string, 0, n-1, table));
 
     return 0;
 }
