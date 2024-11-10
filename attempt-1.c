@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define MAX_SIZE 10000
 
 // Node structure for a doubly linked list
 struct Node {
@@ -8,6 +9,41 @@ struct Node {
     struct Node *prev, *next;
 };
 typedef struct Node node;
+
+char stack[MAX_SIZE];
+int top = -1;
+
+void push_in_stack(char data) {
+    if (top == MAX_SIZE - 1) {
+        printf("Stack Overflow\n");
+        return;
+    }
+    top++;
+    stack[top] = data;
+    printf("%c pushed to stack\n", data);
+}
+
+int pop() {
+    if (top == -1) {
+        printf("Stack Underflow\n");
+        return -1;
+    }
+    int data = stack[top];
+    top--;
+    return data;
+}
+
+void display_stack() {
+    if (top == -1) {
+        printf("Stack is empty\n");
+        return;
+    }
+    printf("Stack elements: ");
+    for (int i = 0; i <= top; i++) {
+        printf("%c ", stack[i]);
+    }
+    printf("\n");
+}
 
 // Function to create a new node
 struct Node* newNode(int data) {
@@ -70,24 +106,29 @@ int max(int a, int b) {
 int find_palindromic_subsequence(char * sample_string, int i, int j, int ** table) {
 
     if (i > j) {
-        printf("SOMETHING TERRIBLY WRONG!!\n");
-        exit(1);
+        printf("Invalid case!\n");
+        // exit(1);
+        return 0;
     }
     if (i==j) {
         return table[i][i];
     }
-    if (sample_string[i] == sample_string[j]) {
-        if (table[i][j] != 0)
+
+    if (table[i][j] != 0)
             return table[i][j];
+    
+    if (sample_string[i] == sample_string[j]) {
+
+        push_in_stack(sample_string[i]);
+        printf("%d %d \n", i, j);
         table[i][j] = find_palindromic_subsequence(sample_string, i+1, j-1, table) + 2;
         return table[i][j];
     }
     else {
-        if (table[i+1][j] == 0)
-            table[i+1][j] = find_palindromic_subsequence(sample_string, i+1, j, table);
         
-        if (table[i][j-1] == 0)
-            table[i][j-1] = find_palindromic_subsequence(sample_string, i, j-1, table);
+        table[i+1][j] = find_palindromic_subsequence(sample_string, i+1, j, table);
+        
+        table[i][j-1] = find_palindromic_subsequence(sample_string, i, j-1, table);
         
         table[i][j] = max(table[i+1][j], table[i][j-1]);
         return table[i][j];
@@ -144,6 +185,18 @@ int main() {
         table[i][i] = 1;        
     }
     printf("%d \n", find_palindromic_subsequence(sample_string, 0, n-1, table));
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            printf("%d ", table[i][j]);
+        }
+        printf("\n");
+        // table[i][i] = 1;
+    }
+
+    display_stack();
 
     return 0;
 }
