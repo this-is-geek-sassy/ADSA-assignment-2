@@ -11,7 +11,9 @@ struct Node {
 typedef struct Node node;
 
 char stack[MAX_SIZE];
-int top = -1;
+char palindrome[MAX_SIZE];
+
+int top = -1, pointer = -1;
 
 void push_in_stack(char data) {
     if (top == MAX_SIZE - 1) {
@@ -33,14 +35,14 @@ int pop() {
     return data;
 }
 
-void display_stack() {
+void display_stack(char * container, int top) {
     if (top == -1) {
         printf("Stack is empty\n");
         return;
     }
     printf("Stack elements: ");
     for (int i = 0; i <= top; i++) {
-        printf("%c ", stack[i]);
+        printf("%c ", container[i]);
     }
     printf("\n");
 }
@@ -120,7 +122,9 @@ int find_palindromic_subsequence(char * sample_string, int i, int j, int ** tabl
     if (sample_string[i] == sample_string[j]) {
 
         push_in_stack(sample_string[i]);
+        // palindrome[++pointer] = sample_string[i];
         printf("%d %d \n", i, j);
+
         table[i][j] = find_palindromic_subsequence(sample_string, i+1, j-1, table) + 2;
         return table[i][j];
     }
@@ -184,7 +188,9 @@ int main() {
         // printf("\n");
         table[i][i] = 1;        
     }
-    printf("%d \n", find_palindromic_subsequence(sample_string, 0, n-1, table));
+
+    int length_of_palindrome = find_palindromic_subsequence(sample_string, 0, n-1, table);
+    printf("%d \n", length_of_palindrome);
 
     for (size_t i = 0; i < n; i++)
     {
@@ -196,7 +202,34 @@ int main() {
         // table[i][i] = 1;
     }
 
-    display_stack();
+    display_stack(stack, top);
+    // display_stack(palindrome, pointer);
+
+    char palindromic_seq[length_of_palindrome];
+
+    int i = 0, j = n-1, right = length_of_palindrome-1, left = 0;
+
+    while (i <= j)
+    {
+        if (sample_string[i] == sample_string[j]) {
+            palindromic_seq[left++] = sample_string[i];
+            palindromic_seq[right--] = sample_string[j];
+        }
+        else if (right == left)
+        {
+            palindromic_seq[right] = sample_string[i];
+        }
+        
+        i++;
+        j--;
+    }
+    
+    for (size_t i = 0; i < length_of_palindrome; i++)
+    {
+        printf("%c ", palindromic_seq[i]);
+    }
+    printf("\n");
+    
 
     return 0;
 }
