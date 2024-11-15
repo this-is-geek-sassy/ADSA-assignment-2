@@ -15,6 +15,25 @@ char palindrome[MAX_SIZE];
 
 int top = -1, pointer = -1;
 
+// Function to return the n-th element in the linked list
+int get_Nth_element(struct Node* head, int n) {
+    struct Node* current = head;
+    int count = 0;
+
+    // Traverse the list
+    while (current != NULL) {
+        if (count == n) {
+            return current->data; // Return the data of the n-th node
+        }
+        count++;
+        current = current->next;
+    }
+
+    // If we reach here, the n-th element does not exist
+    printf("Error: Index out of range.\n");
+    return -1; // Error code for invalid index
+}
+
 void push_in_stack(char data) {
     if (top == MAX_SIZE - 1) {
         printf("Stack Overflow\n");
@@ -105,7 +124,7 @@ int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
-int find_palindromic_subsequence(char * sample_string, int i, int j, int ** table) {
+int find_palindromic_subsequence(char * sample_string, int i, int j, int ** table, node * list) {
 
     if (i > j) {
         printf("Invalid case!\n");
@@ -119,20 +138,20 @@ int find_palindromic_subsequence(char * sample_string, int i, int j, int ** tabl
     if (table[i][j] != 0)
             return table[i][j];
     
-    if (sample_string[i] == sample_string[j]) {
+    if (get_Nth_element(list, i) == get_Nth_element(list, j)) {
 
-        push_in_stack(sample_string[i]);
+        push_in_stack(get_Nth_element(list, i));
         // palindrome[++pointer] = sample_string[i];
         printf("%d %d \n", i, j);
 
-        table[i][j] = find_palindromic_subsequence(sample_string, i+1, j-1, table) + 2;
+        table[i][j] = find_palindromic_subsequence(sample_string, i+1, j-1, table, list) + 2;
         return table[i][j];
     }
     else {
         
-        table[i+1][j] = find_palindromic_subsequence(sample_string, i+1, j, table);
+        table[i+1][j] = find_palindromic_subsequence(sample_string, i+1, j, table, list);
         
-        table[i][j-1] = find_palindromic_subsequence(sample_string, i, j-1, table);
+        table[i][j-1] = find_palindromic_subsequence(sample_string, i, j-1, table, list);
         
         table[i][j] = max(table[i+1][j], table[i][j-1]);
         return table[i][j];
@@ -168,24 +187,7 @@ void writeMatrixToCSV(int rows, int cols, int **matrix, const char* filename) {
     printf("Matrix successfully written to %s\n", filename);
 }
 
-// Function to return the n-th element in the linked list
-int getNthElement(struct Node* head, int n) {
-    struct Node* current = head;
-    int count = 0;
 
-    // Traverse the list
-    while (current != NULL) {
-        if (count == n) {
-            return current->data; // Return the data of the n-th node
-        }
-        count++;
-        current = current->next;
-    }
-
-    // If we reach here, the n-th element does not exist
-    printf("Error: Index out of range.\n");
-    return -1; // Error code for invalid index
-}
 
 int main() {
     struct Node* head = NULL, *tail = NULL;
@@ -237,8 +239,8 @@ int main() {
         table[i][i] = 1;        
     }
 
-    int length_of_palindrome = find_palindromic_subsequence(sample_string, 0, n-1, table);
-    printf("%d \n", length_of_palindrome);
+    int length_of_palindrome = find_palindromic_subsequence(sample_string, 0, n-1, table, head);
+    printf("LENGTH OF PALINDROME: %d \n", length_of_palindrome);
 
     for (size_t i = 0; i < n; i++)
     {
@@ -261,20 +263,20 @@ int main() {
     while (i <= j)
     {
         printf("i = %d, j = %d\n", i, j);
-        if (sample_string[i] == sample_string[j]) {
-            palindromic_seq[left++] = sample_string[i];
-            palindromic_seq[right--] = sample_string[j];
+        if (get_Nth_element(head, i) == get_Nth_element(head, j)) {
+            palindromic_seq[left++] = get_Nth_element(head, i);
+            palindromic_seq[right--] = get_Nth_element(head, j);
             i++;
             j--;
             printf("%c \n", palindromic_seq[left-1]);
         }
         else if (table[i][j] == 1){
-            palindromic_seq[right] = sample_string[i];
+            palindromic_seq[right] = get_Nth_element(head, i);
             break; 
         }
         else if (right == left)
         {
-            palindromic_seq[right] = sample_string[i];
+            palindromic_seq[right] = get_Nth_element(head, i);
         }
 
         else if (table[i][j] == table[i][j-1]) {

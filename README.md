@@ -98,3 +98,9 @@ Potential Improvements:
 
 Add error handling for invalid input or memory allocation failures.
 Optimize greedy solver to handle edge cases, such as overlapping station ranges or identical town coordinates.
+
+
+
+
+------
+problem-02 file: "problem-1-attempt-1.c"
