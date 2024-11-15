@@ -7,6 +7,8 @@ struct Node {
     struct Node* prev;
 };
 
+typedef struct Node node;
+
 // Function to create a new node
 struct Node * newNode(int data) {
     struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
@@ -56,11 +58,26 @@ void printList(struct Node* node) {
 int main() {
     struct Node* head = NULL;
 
-    insertFront(&head, 2);
-    insertFront(&head, 1);
-    insertEnd(&head, 3);
-    insertEnd(&head, 4);
+    // insertFront(&head, 2);
+    // insertFront(&head, 1);
+    // insertEnd(&head, 3);
+    // insertEnd(&head, 4);
 
+    // printList(head);
+
+    int no_of_towns;
+    printf("Enter number of towns: ");
+    scanf("%d", &no_of_towns);
+
+    printf("\nEnter the town coordiantes below: \n");
+
+    for (size_t i = 0; i < no_of_towns; i++)
+    {
+        int temp;
+        scanf("%d", &temp);
+        // node * got_a_node = newNode(temp);
+        insertEnd(&head, temp);
+    }
     printList(head);
 
     return 0;
