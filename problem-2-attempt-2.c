@@ -48,11 +48,37 @@ void insertEnd(struct Node** head_ref, int new_data) {
 
 // Function to print the linked list
 void printList(struct Node* node) {
+    // printf("printing the list: \n");
     while (node != NULL) {
         printf("%d ", node->data);
         node = node->next;
     }
     printf("\n");
+}
+
+node * grredy_solver(node * head, int no_of_towns, int d) {
+
+    node * stations_head = NULL, * j, * i = head;
+    insertEnd(&stations_head, head->data+d);
+    j = stations_head;
+    i = head->next;
+    // printf("\n i = %d\n", i->data);
+    // printf("\n j = %d\n", j->data);
+
+    for (size_t t = 1; t < no_of_towns; t++)
+    {
+        if (i->data <= (j->data+d)){
+            i = i->next;
+            continue;
+        }
+        else {
+            insertEnd(&stations_head, i->data+d);
+            // printList(stations_head);
+            j = j-> next;
+        }
+        i = i->next;
+    }
+    return stations_head;
 }
 
 int main() {
@@ -78,7 +104,19 @@ int main() {
         // node * got_a_node = newNode(temp);
         insertEnd(&head, temp);
     }
+    printf("Your station coordinates are: ");
     printList(head);
+
+    int d;
+    printf("Enter d value: ");
+    scanf("%d", &d);
+
+    node * stations = NULL;
+    node * stations_head = grredy_solver(head, no_of_towns, d);
+
+    printf("----\n");
+    printf("Your stations coordinates will be: ");
+    printList(stations_head);
 
     return 0;
 }
