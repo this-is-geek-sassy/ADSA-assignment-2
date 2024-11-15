@@ -104,3 +104,28 @@ Optimize greedy solver to handle edge cases, such as overlapping station ranges 
 
 ------
 problem-02 file: "problem-1-attempt-1.c"
+Key Components of the Code
+Data Structures:
+
+Doubly Linked List Node (struct Node):
+Contains a character (data).
+Pointers to the previous (prev) and next (next) nodes.
+Stack (stack):
+Fixed-size array (MAX_SIZE), with operations managed using the top variable.
+Key Global Variables:
+
+stack: Array to store stack elements.
+palindrome: Placeholder for storing a palindrome (usage needs verification).
+top: Tracks the index of the topmost stack element.
+pointer: Unused in this snippet, but might track a position in a string or array.
+Functions:
+
+get_Nth_element(struct Node* head, int n):
+
+Traverses the doubly linked list to find the 
+𝑛
+n-th node.
+Returns the data of the node if found, or prints an error for out-of-bounds indices.
+push_in_stack(char data):
+
+Adds a character to the stack unless it overflows.
