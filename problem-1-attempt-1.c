@@ -139,6 +139,54 @@ int find_palindromic_subsequence(char * sample_string, int i, int j, int ** tabl
     }
 }
 
+void writeMatrixToCSV(int rows, int cols, int **matrix, const char* filename) {
+    // Open the file in write mode
+    FILE *file = fopen(filename, "w");
+
+    // Check if the file was opened successfully
+    if (file == NULL) {
+        printf("Error: Could not open file %s for writing.\n", filename);
+        return;
+    }
+
+    // Write the matrix to the file
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            fprintf(file, "%d", matrix[i][j]);
+            // Add a comma if it's not the last column
+            if (j < cols - 1) {
+                fprintf(file, ",");
+            }
+        }
+        // End the row with a newline
+        fprintf(file, "\n");
+    }
+
+    // Close the file
+    fclose(file);
+
+    printf("Matrix successfully written to %s\n", filename);
+}
+
+// Function to return the n-th element in the linked list
+int getNthElement(struct Node* head, int n) {
+    struct Node* current = head;
+    int count = 0;
+
+    // Traverse the list
+    while (current != NULL) {
+        if (count == n) {
+            return current->data; // Return the data of the n-th node
+        }
+        count++;
+        current = current->next;
+    }
+
+    // If we reach here, the n-th element does not exist
+    printf("Error: Index out of range.\n");
+    return -1; // Error code for invalid index
+}
+
 int main() {
     struct Node* head = NULL, *tail = NULL;
 
@@ -202,7 +250,8 @@ int main() {
         // table[i][i] = 1;
     }
 
-    display_stack(stack, top);
+    writeMatrixToCSV(n, n, table, "table.csv");
+    // display_stack(stack, top);
     // display_stack(palindrome, pointer);
 
     char palindromic_seq[length_of_palindrome];
@@ -211,19 +260,35 @@ int main() {
 
     while (i <= j)
     {
+        printf("i = %d, j = %d\n", i, j);
         if (sample_string[i] == sample_string[j]) {
             palindromic_seq[left++] = sample_string[i];
             palindromic_seq[right--] = sample_string[j];
+            i++;
+            j--;
+            printf("%c \n", palindromic_seq[left-1]);
+        }
+        else if (table[i][j] == 1){
+            palindromic_seq[right] = sample_string[i];
+            break; 
         }
         else if (right == left)
         {
             palindromic_seq[right] = sample_string[i];
         }
+
+        else if (table[i][j] == table[i][j-1]) {
+            j--;
+        }
+        else if (table[i][j] == table[i+1][j]) {
+            i++;
+        }
         
-        i++;
-        j--;
+        
+        // i++;
+        // j--;
     }
-    
+    printf("Final palindrome string: \n");
     for (size_t i = 0; i < length_of_palindrome; i++)
     {
         printf("%c ", palindromic_seq[i]);
